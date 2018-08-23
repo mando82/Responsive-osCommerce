@@ -87,7 +87,7 @@
   
     <p class="text-danger text-right"><?php echo FORM_REQUIRED_INFORMATION; ?></p>
     <div class="clearfix"></div>
-
+<?php if (!tep_session_is_registered('customer_id') ) { ?>
     <div class="form-group has-feedback">
       <label for="inputFromName" class="control-label col-sm-3"><?php echo ENTRY_NAME; ?></label>
       <div class="col-sm-9">
@@ -106,6 +106,15 @@
         ?>
       </div>
     </div>
+<?php 
+   } else { 
+    $contact_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_id != '" . (int)$customers_id . "'");
+    $contact = tep_db_fetch_array($contact_query);
+
+    echo tep_draw_hidden_field('name', $contact['customers_firstname'] . ' ' . $contact['customers_lastname']);
+    echo tep_draw_hidden_field('email', $contact['customers_email_address']);
+   }
+?>
     <div class="form-group has-feedback">
       <label for="inputEnquiry" class="control-label col-sm-3"><?php echo ENTRY_ENQUIRY; ?></label>
       <div class="col-sm-9">
